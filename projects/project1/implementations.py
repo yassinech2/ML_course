@@ -14,6 +14,7 @@ def compute_loss_mse(y, tx, w):
 def mean_squared_error_gd(y, tx, initial_w,max_iters, gamma) :
     """Calculate the loss using mse""" 
     w = initial_w
+    loss = compute_loss_mse(y, tx, w)
     for iter in range(max_iters):
         gradient = compute_gradient_mse(y, tx, w)
         w = w - gamma * gradient
@@ -51,6 +52,7 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
 def mean_squared_error_sgd(y, tx, initial_w,max_iters, gamma):
     """Calculate the loss using mse"""
     w = initial_w
+    loss = compute_loss_mse(y, tx, w)
     for iter in range(max_iters):
         for minibatch_y, minibatch_tx in batch_iter(y, tx, 1):
             gradient = compute_gradient_mse(minibatch_y, minibatch_tx, w)
@@ -85,7 +87,7 @@ def compute_logistic_loss(y, tx, w):
     pred = sigmoid(tx.dot(w))
     epsilon = 1e-15  # Small positive value
     pred = np.clip(pred, epsilon, 1 - epsilon)
-    
+
     loss = y.T.dot(np.log(pred)) + (1 - y).T.dot(np.log(1 - pred))
     return np.squeeze(- loss)
 
@@ -99,6 +101,7 @@ def logistic_regression(y, tx, initial_w,max_iters, gamma):
     """implement logistic regression.
     Used Gradient Descent as optimization method"""
     w = initial_w
+    loss = compute_logistic_loss(y, tx, w)
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
@@ -114,6 +117,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w,max_iters, gamma):
     """implement regularized logistic regression
     Used Gradient Descent as optimization method"""
     w = initial_w
+    loss = compute_logistic_loss(y, tx, w)
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
@@ -122,4 +126,5 @@ def reg_logistic_regression(y, tx, lambda_, initial_w,max_iters, gamma):
         w = w - gamma * gradient
         if iter % 100 == 0:
             print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
+    loss = loss = compute_logistic_loss(y, tx, w)
     return w, loss
